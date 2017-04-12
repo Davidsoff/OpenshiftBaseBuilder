@@ -1,0 +1,23 @@
+FROM docker
+
+MAINTAINER David Soff <david@soff.nl>
+
+#	The image expects thefollowing env vars to be set.
+#	When running on opennshift this will automatically be done when using the custom build config setting
+#   OUTPUT_REGISTRY - the Docker registry URL to push this image to
+#   OUTPUT_IMAGE - the name to tag the image with
+#   SOURCE_URI - a URI to fetch the build context from
+#   SOURCE_REF - a reference to pass to Git for which commit to use (optional)
+#	DOCKER_SOCKET - the socket where Docker is running on
+#	PUSH_DOCKERCFG_PATH - path to docker push config
+
+LABEL io.k8s.display-name="Generic piped builder" \
+      io.k8s.description="This is an example of a piped docker builder for use with OpenShift Origin."
+
+RUN apk add --update git && git pull ${SOURCE_URI} && git checkout ${SOURCE_REF}
+RUN export DOCKER_HOST=${DOCKER_SOCKET}
+
+ENTRYPOINT docker build -f Dockerfile.build -t builder . && \
+docker run builder | \
+docker build -t ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE} - && \
+docker push 
