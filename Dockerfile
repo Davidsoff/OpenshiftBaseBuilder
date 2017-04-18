@@ -14,7 +14,7 @@ MAINTAINER David Soff <david@soff.nl>
 LABEL io.k8s.display-name="Generic piped builder" \
       io.k8s.description="This is an example of a piped docker builder for use with OpenShift Origin."
 
-RUN apk add --update git
+RUN apk add --update git ssh
 
 ENTRYPOINT export DOCKER_HOST=${DOCKER_SOCKET} && \
 git clone ${SOURCE_URI} source && cd source && git checkout ${SOURCE_REF} && \
