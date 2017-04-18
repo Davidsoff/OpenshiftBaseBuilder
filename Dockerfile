@@ -2,7 +2,7 @@ FROM docker
 
 MAINTAINER David Soff <david@soff.nl>
 
-#	The image expects thefollowing env vars to be set.
+#	The image expects the following env vars to be set.
 #	When running on opennshift this will automatically be done when using the custom build config setting
 #   OUTPUT_REGISTRY - the Docker registry URL to push this image to
 #   OUTPUT_IMAGE - the name to tag the image with
@@ -17,7 +17,7 @@ LABEL io.k8s.display-name="Generic piped builder" \
 RUN apk add --update git
 
 ENTRYPOINT export DOCKER_HOST=${DOCKER_SOCKET} && \
-git pull ${SOURCE_URI} && git checkout ${SOURCE_REF} && \
+git clone ${SOURCE_URI} source && cd source && git checkout ${SOURCE_REF} && \
 docker build -f Dockerfile.build -t builder . && \
 docker run builder | \
 docker build -t ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE} - && \
