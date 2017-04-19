@@ -21,7 +21,6 @@ RUN apk add --update git openssh && \
 	ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
 
 ENTRYPOINT export DOCKER_HOST=${DOCKER_SOCKET} && \
-	touch /root/.shh/id_rsa &&\
 	cp /root/.ssh/id_rsa.ro /root/.ssh/id_rsa && \
 	chmod 400 /root/.ssh/id_rsa && \
 	git clone ${SOURCE_URI} source && cd source && git checkout ${SOURCE_REF} && \
