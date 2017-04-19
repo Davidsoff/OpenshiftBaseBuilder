@@ -23,7 +23,7 @@ RUN apk add --update git openssh && \
 ENTRYPOINT cp /root/.ssh/id_rsa.ro/ssh-privatekey /root/.ssh/id_rsa && \
 	chmod 400 /root/.ssh/id_rsa && \
 	git clone ${SOURCE_URI} source && cd source && git checkout ${SOURCE_REF} && \
+	cd $SOURCE_CONTEXT_DIR && \
 	docker build -f Dockerfile.build -t builder . && \
-	docker run builder | \
-	docker build -t ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE} - && \
+	docker run builder | docker build -t ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE} - && \
 	docker push 
