@@ -20,10 +20,11 @@ RUN apk add --update git openssh && \
 	ssh-keyscan github.com >> /root/.ssh/known_hosts && \
 	ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
 
-ENTRYPOINT cp /root/.ssh/id_rsa.ro/ssh-privatekey /root/.ssh/id_rsa && \
+ENTRYPOINT cat $PUSH_DOCKERCFG_PATH && \
+	cp /root/.ssh/id_rsa.ro/ssh-privatekey /root/.ssh/id_rsa && \
 	chmod 400 /root/.ssh/id_rsa && \
 	git clone ${SOURCE_URI} source && cd source && git checkout ${SOURCE_REF} && \
 	cd .$SOURCE_CONTEXT_DIR && \
 	docker build -f Dockerfile.build -t builder . && \
 	docker run builder | docker build -t ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE} - && \
-	docker push ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE}
+	docker push ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE}s
