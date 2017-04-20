@@ -26,4 +26,4 @@ ENTRYPOINT cp /root/.ssh/id_rsa.ro/ssh-privatekey /root/.ssh/id_rsa && \
 	cd .$SOURCE_CONTEXT_DIR && \
 	docker build -f Dockerfile.build -t builder . && \
 	docker run builder | docker build -t ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE} - && \
-	docker push 
+	docker push ${OUTPUT_REGISTRY}/${OUTPUT_IMAGE}
