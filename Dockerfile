@@ -20,7 +20,7 @@ RUN apk add --update git openssh && \
 	ssh-keyscan github.com >> /root/.ssh/known_hosts && \
 	ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
 
-ENTRYPOINT cat $PUSH_DOCKERCFG_PATH/.dockercfg && \
+ENTRYPOINT export DOCKER_CONFIG=$PUSH_DOCKERCFG_PATH && \
 	cp /root/.ssh/id_rsa.ro/ssh-privatekey /root/.ssh/id_rsa && \
 	chmod 400 /root/.ssh/id_rsa && \
 	git clone ${SOURCE_URI} source && cd source && git checkout ${SOURCE_REF} && \
